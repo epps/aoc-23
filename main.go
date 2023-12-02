@@ -6,6 +6,13 @@ import (
 	"log"
 )
 
+type PuzzleNumber int
+
+const (
+	PUZZLE_ONE = 1
+	PUZZLE_TWO = 2
+)
+
 type Puzzle interface {
 	Solve() (interface{}, error)
 }
@@ -31,6 +38,8 @@ func main() {
 	switch *dayNum {
 	case 1:
 		puzzle, puzzleErr = NewDay1Puzzle(*puzzleNum)
+	case 2:
+		puzzle, puzzleErr = NewDay2Puzzle(*puzzleNum)
 	default:
 		puzzleErr = fmt.Errorf("day %d not implemented", *dayNum)
 	}

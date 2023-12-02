@@ -8,13 +8,6 @@ import (
 	"unicode"
 )
 
-type PuzzleNumber int
-
-const (
-	PUZZLE_ONE = 1
-	PUZZLE_TWO = 2
-)
-
 type Day1Puzzle struct {
 	input  *os.File
 	number int
@@ -46,8 +39,6 @@ func (d *Day1Puzzle) Solve() (interface{}, error) {
 		if err != nil {
 			log.Panicf("failed to parse %s: %v", firstDigit+lastDigit, err)
 		}
-		log.Println(text, firstDigit, lastDigit, coordinate)
-
 		coordinates = append(coordinates, coordinate)
 	}
 
