@@ -30,11 +30,7 @@ func main() {
 	var puzzleErr error
 	switch *dayNum {
 	case 1:
-		if *puzzleNum == 1 {
-			puzzle, puzzleErr = NewDay1Puzzle1()
-		} else {
-			puzzleErr = fmt.Errorf("puzzle 2 for day 1 not implemented")
-		}
+		puzzle, puzzleErr = NewDay1Puzzle(*puzzleNum)
 	default:
 		puzzleErr = fmt.Errorf("day %d not implemented", *dayNum)
 	}
