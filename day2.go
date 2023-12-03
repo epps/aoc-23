@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -27,54 +26,103 @@ type Day2Puzzle struct {
 }
 
 func (d *Day2Puzzle) Solve() (interface{}, error) {
-	if d.number == PUZZLE_TWO {
-		return nil, fmt.Errorf("puzzle 2 of day 2 not implemented")
-	}
 	scanner := bufio.NewScanner(d.input)
 	scanner.Split(bufio.ScanLines)
 
-	gameIds := make([]int64, 0)
+	results := make([]int64, 0)
 	for scanner.Scan() {
 		line := scanner.Text()
 
-		lineBrokenOnColon := strings.Split(line, ":")
-		gameStr := strings.Split(lineBrokenOnColon[0], " ")[1]
-		rounds := strings.Split(lineBrokenOnColon[1], ";")
-
-		isValidGame := true
-		for _, round := range rounds {
-			cubes := strings.Split(round, ",")
-			for _, cube := range cubes {
-				countParts := strings.Split(strings.TrimSpace(cube), " ")
-				count, err := strconv.ParseInt(countParts[0], 0, 0)
-				if err != nil {
-					log.Fatalf("Failed to parse cube count %s due to error: %v", countParts[0], err)
-				}
-				maxCountForColor := cubeMap[countParts[1]]
-
-				if count > maxCountForColor {
-					isValidGame = false
-					break
-				}
-			}
-		}
-
-		if isValidGame {
-			gameId, err := strconv.ParseInt(gameStr, 0, 0)
-			if err != nil {
-				log.Fatalf("Failed to parse game %s due to error: %v", gameStr, err)
-			}
-			gameIds = append(gameIds, gameId)
+		switch d.number {
+		case PUZZLE_ONE:
+			d.processLineForPuzzle1(line, &results)
+		case PUZZLE_TWO:
+			d.processLineForPuzzle2(line, &results)
+		default:
+			log.Fatalf("unrecognized puzzle number: %d", d.number)
 		}
 	}
 
 	var sum int64
 
-	for _, id := range gameIds {
+	for _, id := range results {
 		sum += id
 	}
 
 	return sum, nil
+}
+
+func (d *Day2Puzzle) processLineForPuzzle1(line string, results *[]int64) {
+	lineBrokenOnColon := strings.Split(line, ":")
+	gameStr := strings.Split(lineBrokenOnColon[0], " ")[1]
+	rounds := strings.Split(lineBrokenOnColon[1], ";")
+
+	isValidGame := true
+	for _, round := range rounds {
+		cubes := strings.Split(round, ",")
+		for _, cube := range cubes {
+			countParts := strings.Split(strings.TrimSpace(cube), " ")
+			count, err := strconv.ParseInt(countParts[0], 0, 0)
+			if err != nil {
+				log.Fatalf("Failed to parse cube count %s due to error: %v", countParts[0], err)
+			}
+			maxCountForColor := cubeMap[countParts[1]]
+
+			if count > maxCountForColor {
+				isValidGame = false
+				break
+			}
+		}
+	}
+
+	if isValidGame {
+		gameId, err := strconv.ParseInt(gameStr, 0, 0)
+		if err != nil {
+			log.Fatalf("Failed to parse game %s due to error: %v", gameStr, err)
+		}
+		*results = append(*results, gameId)
+	}
+}
+
+func (d *Day2Puzzle) processLineForPuzzle2(line string, results *[]int64) {
+	lineBrokenOnColon := strings.Split(line, ":")
+	// gameStr := strings.Split(lineBrokenOnColon[0], " ")[1]
+	rounds := strings.Split(lineBrokenOnColon[1], ";")
+
+	var maxRed int64
+	var maxGreen int64
+	var maxBlue int64
+	for _, round := range rounds {
+		cubes := strings.Split(round, ",")
+		for _, cube := range cubes {
+			countParts := strings.Split(strings.TrimSpace(cube), " ")
+			count, err := strconv.ParseInt(countParts[0], 0, 0)
+			if err != nil {
+				log.Fatalf("Failed to parse cube count %s due to error: %v", countParts[0], err)
+			}
+			color := countParts[1]
+			switch color {
+			case "red":
+				if count > maxRed {
+					maxRed = count
+				}
+			case "green":
+				if count > maxGreen {
+					maxGreen = count
+				}
+			case "blue":
+				if count > maxBlue {
+					maxBlue = count
+				}
+			default:
+				log.Fatalf("unrecognized color %s", color)
+			}
+		}
+	}
+
+	power := maxRed * maxGreen * maxBlue
+
+	*results = append(*results, power)
 }
 
 func NewDay2Puzzle(puzzleNumber int) (Puzzle, error) {

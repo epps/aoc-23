@@ -32,12 +32,12 @@ func (d *Day1Puzzle) Solve() (interface{}, error) {
 		case PUZZLE_TWO:
 			d.processLineForPuzzle2(text, &firstDigit, &lastDigit)
 		default:
-			log.Panicf("unrecognized puzzle number: %d", d.number)
+			log.Fatalf("unrecognized puzzle number: %d", d.number)
 		}
 
 		coordinate, err := strconv.ParseInt(firstDigit+lastDigit, 0, 0)
 		if err != nil {
-			log.Panicf("failed to parse %s: %v", firstDigit+lastDigit, err)
+			log.Fatalf("failed to parse %s: %v", firstDigit+lastDigit, err)
 		}
 		coordinates = append(coordinates, coordinate)
 	}
