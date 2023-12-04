@@ -22,3 +22,6 @@ go.work
 
 # Puzzle Inputs
 /puzzle-inputs
+
+# Day template
+day-template.txt

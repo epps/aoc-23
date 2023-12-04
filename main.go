@@ -40,6 +40,8 @@ func main() {
 		puzzle, puzzleErr = NewDay1Puzzle(*puzzleNum)
 	case 2:
 		puzzle, puzzleErr = NewDay2Puzzle(*puzzleNum)
+	case 3:
+		puzzle, puzzleErr = NewDay3Puzzle(*puzzleNum)
 	default:
 		puzzleErr = fmt.Errorf("day %d not implemented", *dayNum)
 	}
